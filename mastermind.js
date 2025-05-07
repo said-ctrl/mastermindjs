@@ -1,32 +1,67 @@
-
 let secretCombination = [];
 let currentGuess = [];
 let attemptsLeft = 12;
 let showHistory = true; // Défini selon le choix du joueur
+let allowDuplicateColors = false; // Par défaut, les couleurs ne peuvent pas être dupliquées
+let difficulty = ''; // Niveau de difficulté choisi
 const COLORS = ['red', 'blue', 'green', 'yellow', 'orange', 'purple'];
 
-// Lancer la partie après choix utilisateur
-function startGame(historyVisible) {
-    showHistory = historyVisible;
+// Démarrage de la partie selon le niveau
+function startGame(level) {
+    difficulty = level; // Définit le niveau choisi
+    showHistory = (level !== 'hard'); // Si le niveau est 'hard', l'historique est caché
+    allowDuplicateColors = (level !== 'easy'); // Si le niveau est 'easy', les couleurs ne peuvent pas se répéter
 
+    // Mise à jour de l'interface en fonction du niveau choisi
     document.getElementById('startScreen').classList.add('hidden');
     document.getElementById('gameArea').classList.remove('hidden');
 
+    // Cache l'historique si nécessaire
     if (!showHistory) {
         document.getElementById('history').classList.add('hidden');
+    } else {
+        document.getElementById('history').classList.remove('hidden');
     }
 
+    // Afficher les explications du niveau
+    showLevelDescription(level);
+
+    // Génère la combinaison secrète avec les règles du niveau choisi
     generateSecretCombination();
 }
 
-// Générer la combinaison secrète
+// Afficher la description du niveau choisi
+function showLevelDescription(level) {
+    const levelDescription = document.getElementById('levelDescription');
+    if (level === 'easy') {
+        levelDescription.innerHTML = `
+            <p><strong>Facile :</strong> Vous ne pouvez pas choisir la même couleur deux fois. L'historique des tentatives est affiché.</p>
+        `;
+    } else if (level === 'medium') {
+        levelDescription.innerHTML = `
+            <p><strong>Moyen :</strong> Vous pouvez choisir plusieurs fois la même couleur. L'historique des tentatives est affiché.</p>
+        `;
+    } else if (level === 'hard') {
+        levelDescription.innerHTML = `
+            <p><strong>Difficile :</strong> Vous pouvez choisir plusieurs fois la même couleur. L'historique des tentatives n'est pas affiché.</p>
+        `;
+    }
+}
+
+// Générer la combinaison secrète avec ou sans répétition des couleurs
 function generateSecretCombination() {
     secretCombination = [];
-    for (let i = 0; i < 4; i++) {
-        const randomColor = COLORS[Math.floor(Math.random() * COLORS.length)];
-        secretCombination.push(randomColor);
+    const used = new Set();
+
+    // Génération de la combinaison en fonction du niveau
+    while (secretCombination.length < 4) {
+        const color = COLORS[Math.floor(Math.random() * COLORS.length)];
+        if (!allowDuplicateColors && used.has(color)) continue; // Ne permet pas les doublons en mode "easy"
+        secretCombination.push(color);
+        used.add(color);
     }
-    console.log("Combinaison secrète:", secretCombination); // Debug
+
+    console.log("Combinaison secrète:", secretCombination);
 }
 
 // Sélectionner une couleur
@@ -181,4 +216,16 @@ function disableGame() {
     submitBtn.disabled = true;
     submitBtn.classList.add('opacity-50', 'cursor-not-allowed');
     document.getElementById('resetBtn').classList.remove('hidden');
+}
+// Retourner à l'écran de démarrage
+function returnToMenu() {
+    document.getElementById('gameArea').classList.add('hidden');
+    document.getElementById('startScreen').classList.remove('hidden');
+    document.getElementById('levelDescription').innerHTML = '';
+    document.getElementById('feedback').innerText = '';
+    document.getElementById('history').innerHTML = '';
+    document.getElementById('currentGuess').innerHTML = '';
+    currentGuess = [];
+    secretCombination = [];
+    attemptsLeft = 12;
 }
