@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Jeu Mastermind</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 text-gray-900 font-sans min-h-screen flex flex-col items-center p-6">
+
+  <!-- Écran de démarrage -->
+  <div id="startScreen" class="text-center mt-12">
+    <h1 class="text-3xl font-bold mb-6">Jeu Mastermind</h1>
+    <p class="mb-4 text-lg">Souhaitez-vous voir l’historique des tentatives ?</p>
+    <div class="flex gap-6 justify-center">
+      <button onclick="startGame(true)" class="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded">Oui</button>
+      <button onclick="startGame(false)" class="bg-gray-600 hover:bg-gray-700 text-white py-2 px-4 rounded">Non</button>
+    </div>
+  </div>
+
+  <!-- Zone de jeu (cachée au départ) -->
+  <div id="gameArea" class="hidden w-full max-w-lg mt-8 flex flex-col items-center">
+    <div id="colorSelection" class="flex gap-3 mb-6 flex-wrap justify-center">
+      <div class="w-12 h-12 rounded-full cursor-pointer" style="background-color: red;" onclick="selectColor('red')"></div>
+      <div class="w-12 h-12 rounded-full cursor-pointer" style="background-color: blue;" onclick="selectColor('blue')"></div>
+      <div class="w-12 h-12 rounded-full cursor-pointer" style="background-color: green;" onclick="selectColor('green')"></div>
+      <div class="w-12 h-12 rounded-full cursor-pointer" style="background-color: yellow;" onclick="selectColor('yellow')"></div>
+      <div class="w-12 h-12 rounded-full cursor-pointer" style="background-color: orange;" onclick="selectColor('orange')"></div>
+      <div class="w-12 h-12 rounded-full cursor-pointer" style="background-color: purple;" onclick="selectColor('purple')"></div>
+    </div>
+
+    <h2 class="text-xl font-semibold mb-2">Votre tentative :</h2>
+    <div id="currentGuess" class="flex gap-2 mb-4 min-h-[48px]"></div>
+
+    <button onclick="submitGuess()" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded mb-4">
+      Soumettre la tentative
+    </button>
+
+    <h3 id="feedback" class="text-lg font-medium mb-2"></h3>
+    <p class="text-sm">Essais restants: <span id="attemptsLeft" class="font-bold">12</span></p>
+
+    <!-- Bouton Rejouer -->
+    <button onclick="resetGame()" id="resetBtn" class="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded mt-4 hidden">
+      Rejouer
+    </button>
+
+    <!-- Historique des essais -->
+    <div id="history" class="mt-6 w-full space-y-4"></div>
+  </div>
+
+  <script src="mastermind.js"></script>
+</body>
+</html>
