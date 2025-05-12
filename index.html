@@ -81,15 +81,44 @@
     <!-- Titre -->
     <h1 class="text-4xl font-bold text-cyan-300">🧠 Mastermind</h1>
 
-    <!-- Écran de démarrage -->
-    <div id="startScreen">
-      <p class="mb-4 text-lg text-gray-400">Choisissez un niveau :</p>
-      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 justify-center">
-        <button onclick="startGame('easy')" class="bg-cyan-700 hover:bg-cyan-600 text-white py-2 px-4 rounded">Facile</button>
-        <button onclick="startGame('medium')" class="bg-cyan-700 hover:bg-cyan-600 text-white py-2 px-4 rounded">Moyen</button>
-        <button onclick="startGame('hard')" class="bg-cyan-700 hover:bg-cyan-600 text-white py-2 px-4 rounded">Difficile</button>
-      </div>
+  <!-- Écran de démarrage -->
+<div id="startScreen" class="text-center">
+  <p class="mb-4 text-lg text-gray-600 font-medium">Choisissez un niveau :</p>
+  <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 justify-center">
+
+    <!-- Facile -->
+    <div class="relative group">
+      <button onclick="startGame('easy')" class="bg-green-600 hover:bg-green-500 text-white py-2 px-4 rounded font-semibold">
+        Facile
+      </button>
+      <span class="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 w-52 bg-gray-800 text-white text-sm p-2 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none z-10">
+        Historique visible, pas de couleurs identiques.
+      </span>
     </div>
+
+    <!-- Moyen -->
+    <div class="relative group">
+      <button onclick="startGame('medium')" class="bg-yellow-500 hover:bg-yellow-400 text-white py-2 px-4 rounded font-semibold">
+        Moyen
+      </button>
+      <span class="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 w-52 bg-gray-800 text-white text-sm p-2 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none z-10">
+        Historique visible, couleurs identiques possibles.
+      </span>
+    </div>
+
+    <!-- Difficile -->
+    <div class="relative group">
+      <button onclick="startGame('hard')" class="bg-red-600 hover:bg-red-500 text-white py-2 px-4 rounded font-semibold">
+        Difficile
+      </button>
+      <span class="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 w-52 bg-gray-800 text-white text-sm p-2 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none z-10">
+        Pas d'historique, couleurs identiques possibles.
+      </span>
+    </div>
+
+  </div>
+</div>
+
 
     <!-- Description du niveau -->
     <div id="levelDescription" class="text-sm text-blue-300"></div>
