@@ -72,14 +72,15 @@ function selectColor(color) {
     }
 }
 
-// Afficher la tentative en cours
+// Afficher la tentative en cours (avec la mise en forme améliorée)
 function displayCurrentGuess() {
     const guessDisplay = document.getElementById('currentGuess');
-    guessDisplay.innerHTML = '';
-    currentGuess.forEach(color => {
+    guessDisplay.innerHTML = ''; // Réinitialiser l'affichage précédent
+    currentGuess.forEach((color, index) => {
         const colorBox = document.createElement('div');
-        colorBox.className = 'w-10 h-10 rounded-full border border-gray-400';
+        colorBox.className = 'w-12 h-12 rounded-full color-circle border';
         colorBox.style.backgroundColor = color;
+        colorBox.title = `Position ${index + 1}`;  // Affiche la position de la couleur
         guessDisplay.appendChild(colorBox);
     });
 }
@@ -152,23 +153,23 @@ function countIncorrectPositions(guess) {
     return count;
 }
 
-// Historique
+// Historique des tentatives avec une mise en forme plus claire
 function addGuessToHistory(guess, correct, incorrect) {
     const historyDiv = document.getElementById('history');
     const entry = document.createElement('div');
-    entry.className = 'flex items-center justify-between bg-white p-3 rounded shadow';
+    entry.className = 'history-entry';
 
     const guessDiv = document.createElement('div');
-    guessDiv.className = 'flex gap-2';
+    guessDiv.className = 'guess';
     guess.forEach(color => {
         const colorBox = document.createElement('div');
-        colorBox.className = 'w-6 h-6 rounded-full border';
         colorBox.style.backgroundColor = color;
+        colorBox.className = 'w-8 h-8 rounded-full';
         guessDiv.appendChild(colorBox);
     });
 
     const feedback = document.createElement('div');
-    feedback.className = 'text-sm font-medium';
+    feedback.className = 'feedback';
     feedback.innerText = `${correct}✔️ / ${incorrect}❗`;
 
     entry.appendChild(guessDiv);
@@ -217,6 +218,7 @@ function disableGame() {
     submitBtn.classList.add('opacity-50', 'cursor-not-allowed');
     document.getElementById('resetBtn').classList.remove('hidden');
 }
+
 // Retourner à l'écran de démarrage
 function returnToMenu() {
     document.getElementById('gameArea').classList.add('hidden');

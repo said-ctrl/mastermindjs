@@ -9,67 +9,125 @@
   <style>
     body {
       font-family: 'Orbitron', sans-serif;
-      background: linear-gradient(135deg, #0f0f0f, #1a1a2e);
+      background: radial-gradient(ellipse at center, #1a1a2e 0%, #0f0f0f 100%);
       color: #e0e0e0;
     }
-    .neon {
-      background-color: #111827;
-      border: 1px solid #38bdf8;
-      box-shadow: 0 0 8px #38bdf8;
-      transition: all 0.3s ease;
+
+    .panel {
+      background-color: #121212;
+      border: 1px solid #2e2e3a;
+      border-radius: 12px;
+      padding: 2rem;
+      box-shadow: 0 0 10px rgba(0, 255, 255, 0.1);
     }
-    .neon:hover {
-      background-color: #1e3a8a;
-      box-shadow: 0 0 16px #38bdf8;
+
+    .color-circle {
+      transition: transform 0.2s ease;
     }
+
+    .color-circle:hover {
+      transform: scale(1.1);
+      outline: 2px solid white;
+    }
+
+    .guess-slot {
+      border: 2px dashed #aaa;
+      border-radius: 50%;
+      width: 48px;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      font-weight: bold;
+      color: #ccc;
+    }
+
+    .history-entry {
+      background: rgba(255, 255, 255, 0.1);
+      border: 2px solid #444;
+      padding: 10px;
+      border-radius: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .history-entry .guess {
+      display: flex;
+      gap: 6px;
+    }
+
+    .history-entry .guess div {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+    }
+
+    .history-entry .feedback {
+      color: #00ff00;
+      font-weight: bold;
+    }
+
+    .history-entry:hover {
+      background: rgba(0, 255, 255, 0.2);
+    }
+
   </style>
 </head>
-<body class="min-h-screen flex flex-col items-center p-6">
+<body class="min-h-screen flex items-center justify-center p-4">
 
-  <!-- Titre -->
-  <h1 class="text-4xl font-bold mb-6 text-cyan-400">🎮 Mastermind</h1>
+  <div class="panel max-w-4xl w-full text-center space-y-6">
+    <!-- Titre -->
+    <h1 class="text-4xl font-bold text-cyan-300">🧠 Mastermind</h1>
 
-  <!-- Écran de démarrage -->
-  <div id="startScreen" class="text-center mt-12">
-    <p class="mb-4 text-lg text-gray-300">Choisissez un niveau de difficulté :</p>
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 justify-center">
-      <button onclick="startGame('easy')" class="neon text-white py-2 px-4 rounded">Facile</button>
-      <button onclick="startGame('medium')" class="neon text-white py-2 px-4 rounded">Moyen</button>
-      <button onclick="startGame('hard')" class="neon text-white py-2 px-4 rounded">Difficile</button>
-    </div>
-  </div>
-
-  <!-- Description du niveau -->
-  <div id="levelDescription" class="text-center mt-8 max-w-xl text-sm text-blue-300"></div>
-
-  <!-- Zone de jeu -->
-  <div id="gameArea" class="hidden w-full max-w-lg mt-8 flex flex-col items-center">
-    <!-- Palette de couleurs -->
-    <div id="colorSelection" class="flex gap-3 mb-6 flex-wrap justify-center">
-      <div class="w-12 h-12 rounded-full cursor-pointer" style="background-color: red;" onclick="selectColor('red')"></div>
-      <div class="w-12 h-12 rounded-full cursor-pointer" style="background-color: blue;" onclick="selectColor('blue')"></div>
-      <div class="w-12 h-12 rounded-full cursor-pointer" style="background-color: green;" onclick="selectColor('green')"></div>
-      <div class="w-12 h-12 rounded-full cursor-pointer" style="background-color: yellow;" onclick="selectColor('yellow')"></div>
-      <div class="w-12 h-12 rounded-full cursor-pointer" style="background-color: orange;" onclick="selectColor('orange')"></div>
-      <div class="w-12 h-12 rounded-full cursor-pointer" style="background-color: purple;" onclick="selectColor('purple')"></div>
+    <!-- Écran de démarrage -->
+    <div id="startScreen">
+      <p class="mb-4 text-lg text-gray-400">Choisissez un niveau :</p>
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 justify-center">
+        <button onclick="startGame('easy')" class="bg-cyan-700 hover:bg-cyan-600 text-white py-2 px-4 rounded">Facile</button>
+        <button onclick="startGame('medium')" class="bg-cyan-700 hover:bg-cyan-600 text-white py-2 px-4 rounded">Moyen</button>
+        <button onclick="startGame('hard')" class="bg-cyan-700 hover:bg-cyan-600 text-white py-2 px-4 rounded">Difficile</button>
+      </div>
     </div>
 
-    <h2 class="text-xl font-semibold mb-2">Votre tentative :</h2>
-    <div id="currentGuess" class="flex gap-2 mb-4 min-h-[48px]"></div>
+    <!-- Description du niveau -->
+    <div id="levelDescription" class="text-sm text-blue-300"></div>
 
-    <button onclick="submitGuess()" class="neon text-white font-semibold py-2 px-4 rounded mb-4">Soumettre</button>
+    <!-- Zone de jeu -->
+    <div id="gameArea" class="hidden mt-4 flex flex-col items-center space-y-4">
+      <!-- Palette -->
+      <div id="colorSelection" class="flex gap-3 flex-wrap justify-center">
+        <div class="w-12 h-12 rounded-full color-circle cursor-pointer border" style="background-color: red;" onclick="selectColor('red')"></div>
+        <div class="w-12 h-12 rounded-full color-circle cursor-pointer border" style="background-color: blue;" onclick="selectColor('blue')"></div>
+        <div class="w-12 h-12 rounded-full color-circle cursor-pointer border" style="background-color: green;" onclick="selectColor('green')"></div>
+        <div class="w-12 h-12 rounded-full color-circle cursor-pointer border" style="background-color: yellow;" onclick="selectColor('yellow')"></div>
+        <div class="w-12 h-12 rounded-full color-circle cursor-pointer border" style="background-color: orange;" onclick="selectColor('orange')"></div>
+        <div class="w-12 h-12 rounded-full color-circle cursor-pointer border" style="background-color: purple;" onclick="selectColor('purple')"></div>
+      </div>
 
-    <h3 id="feedback" class="text-lg font-medium mb-2 text-green-300"></h3>
-    <p class="text-sm text-gray-300">Essais restants : <span id="attemptsLeft" class="font-bold text-white">12</span></p>
+      <h2 class="text-lg font-semibold">Votre tentative :</h2>
+      <div id="currentGuess" class="flex gap-4 mb-2">
+        <div class="guess-slot" id="slot-1">1</div>
+        <div class="guess-slot" id="slot-2">2</div>
+        <div class="guess-slot" id="slot-3">3</div>
+        <div class="guess-slot" id="slot-4">4</div>
+      </div>
 
-    <!-- Bouton Rejouer et Changer de niveau -->
-    <div class="flex gap-4 mt-4">
-      <button onclick="resetGame()" id="resetBtn" class="neon text-white font-semibold py-2 px-4 rounded hidden">Rejouer</button>
-      <button onclick="returnToMenu()" class="neon text-white font-semibold py-2 px-4 rounded">Changer de niveau</button>
+      <button onclick="submitGuess()" class="bg-blue-600 hover:bg-blue-500 text-white font-semibold py-2 px-4 rounded">Soumettre</button>
+
+      <div id="feedback" class="text-green-300 font-medium"></div>
+      <p class="text-sm text-gray-400">Essais restants : <span id="attemptsLeft" class="font-bold text-white">12</span></p>
+
+      <div class="flex gap-4">
+        <button onclick="resetGame()" id="resetBtn" class="bg-gray-600 hover:bg-gray-500 text-white py-2 px-4 rounded hidden">Rejouer</button>
+      </div>
+
+      <div id="history" class="w-full mt-4 space-y-2"></div>
+
+      <!-- Menu -->
+      <button onclick="returnToMenu()" class="bg-gray-600 hover:bg-gray-500 text-white py-2 px-4 rounded mt-4">Retour au Menu</button>
     </div>
-
-    <!-- Historique des essais -->
-    <div id="history" class="mt-6 w-full space-y-4"></div>
   </div>
 
   <script src="mastermind.js"></script>
